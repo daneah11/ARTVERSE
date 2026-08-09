@@ -1,0 +1,503 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artverse — Cipta. Kongsi. Hargai.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root{
+  --blue:#328bd8;--blue2:#65c8f3;--purple:#7651c9;--purple2:#a98bea;
+  --green:#58b878;--yellow:#f4c94f;--orange:#ef8d54;
+  --ink:#26364a;--muted:#708197;--line:#e4ebf2;--bg:#f6f9fc;--white:#fff;
+  --shadow:0 14px 35px rgba(38,54,74,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Nunito,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.app{min-height:100vh}
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{max-width:1250px;margin:auto;padding:13px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:11px;font-size:25px;font-weight:900;color:var(--purple)}
+.brand-mark{width:45px;height:45px;border-radius:14px;background:linear-gradient(135deg,var(--purple),var(--blue2));box-shadow:0 7px 16px rgba(118,81,201,.25);position:relative}
+.brand-mark:before,.brand-mark:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.brand-mark:before{width:17px;height:17px;left:10px;top:10px}
+.brand-mark:after{width:9px;height:9px;right:9px;bottom:9px}
+.navlinks{display:flex;gap:5px}
+.navlinks button{border:0;background:transparent;color:#61738a;font-weight:800;padding:10px 13px;border-radius:12px}
+.navlinks button:hover,.navlinks button.active{background:#f0ebff;color:var(--purple)}
+.profile-chip{font-size:13px;font-weight:800;background:#f1f6fb;padding:9px 13px;border-radius:18px}
+
+main{max-width:1250px;margin:auto;padding:30px 22px 90px;position:relative}
+.view{display:none}.view.active{display:block}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center;min-height:580px}
+.hero-copy h1{font-size:clamp(55px,8vw,92px);line-height:.9;margin:12px 0;color:var(--purple);font-weight:900;letter-spacing:-3px}
+.hero-copy h1 span{color:var(--blue)}
+.hero-copy h2{font-size:25px;margin:0;color:#42556b}
+.hero-copy p{font-size:18px;line-height:1.7;color:var(--muted);max-width:650px}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:25px}
+.btn{border:0;border-radius:14px;padding:13px 19px;font-weight:900;box-shadow:0 5px 0 rgba(38,54,74,.10);transition:.15s}
+.btn:active{transform:translateY(3px);box-shadow:none}
+.primary{background:var(--purple);color:#fff}.blue{background:var(--blue);color:#fff}
+.green{background:var(--green);color:#fff}.yellow{background:var(--yellow);color:#493c0d}
+.soft{background:#edf4fa;color:var(--blue)}.orange{background:var(--orange);color:#fff}
+.outline{background:#fff;border:2px solid var(--line);box-shadow:none;color:var(--ink)}
+
+.hero-art{height:500px;border-radius:34px;overflow:hidden;position:relative;background:linear-gradient(180deg,#c9efff 0 58%,#d9efd3 58%);box-shadow:var(--shadow)}
+.sun{position:absolute;width:80px;height:80px;border-radius:50%;background:#ffd978;right:75px;top:55px;box-shadow:0 0 0 18px rgba(255,255,255,.35)}
+.cloud{position:absolute;width:110px;height:30px;border-radius:30px;background:#fff;top:105px;left:55px}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:48px;height:48px;left:20px;top:-22px}.cloud:after{width:38px;height:38px;left:58px;top:-16px}
+.cloud.two{left:auto;right:30px;top:170px;transform:scale(.75)}
+.floor{position:absolute;left:8%;right:8%;bottom:40px;height:105px;background:#fff;border-radius:28px;box-shadow:0 10px 0 rgba(55,95,105,.12)}
+.easel{position:absolute;width:190px;height:235px;left:19%;bottom:92px;transform:rotate(-2deg)}
+.canvas{position:absolute;inset:0 0 55px;background:linear-gradient(135deg,#f5b5a4,#91c8ee 45%,#f6d96b);border:10px solid #e6d2b5;border-radius:6px;box-shadow:0 9px 18px rgba(38,54,74,.15)}
+.canvas:before{content:"";position:absolute;width:75px;height:75px;border-radius:50%;background:#fff4b7;right:25px;top:30px;box-shadow:-55px 75px 0 4px #6fc57e,25px 105px 0 2px #8d74d8}
+.leg{position:absolute;width:10px;height:155px;background:#8e6a4b;bottom:0;border-radius:8px;transform-origin:top}
+.leg.l{left:25px;transform:rotate(10deg)}.leg.r{right:25px;transform:rotate(-10deg)}
+.palette3d{position:absolute;right:16%;bottom:100px;width:130px;height:78px;border-radius:55% 45%;background:#dfad91;transform:rotate(-12deg);box-shadow:inset 12px 10px 0 #c9957c}
+.palette3d:before{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;right:18px;top:28px;box-shadow:-55px -13px 0 #ef8d54,-35px 15px 0 #7651c9,-5px 25px 0 #58b878}
+.brush3d{position:absolute;width:170px;height:15px;background:#d8a46e;right:9%;bottom:168px;transform:rotate(-28deg);border-radius:10px}
+.brush3d:after{content:"";position:absolute;right:-25px;top:-6px;width:34px;height:28px;border-radius:4px 17px 17px 4px;background:#7651c9}
+
+.section-title{text-align:center;margin:30px 0 24px}
+.section-title h2{margin:0 0 7px;font-size:32px}.section-title p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow)}
+.feature{min-height:170px}.feature h3{margin:10px 0 6px}.feature p{color:var(--muted);line-height:1.6}
+.icon-box{width:55px;height:55px;border-radius:17px;display:grid;place-items:center;font-weight:900;color:#fff}
+.i-purple{background:linear-gradient(135deg,var(--purple),var(--purple2))}
+.i-blue{background:linear-gradient(135deg,var(--blue),var(--blue2))}
+.i-green{background:linear-gradient(135deg,#3f9f63,var(--green))}
+.i-yellow{background:linear-gradient(135deg,#e9b92f,#f6dc72);color:#55430b}
+
+.dashboard-head{display:flex;justify-content:space-between;align-items:center;margin:8px 0 22px}
+.dashboard-head h2{margin:0;font-size:32px}.dashboard-head p{color:var(--muted)}
+.avatar{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#e9e2ff,#dff4ff);display:grid;place-items:center;font-size:20px;font-weight:900;color:var(--purple)}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+.stat{background:#fff;border-radius:20px;padding:19px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.stat strong{display:block;font-size:30px;color:var(--purple)}.stat span{font-size:13px;color:var(--muted);font-weight:800}
+
+.form-card{max-width:900px;margin:auto;background:#fff;border-radius:28px;padding:28px;box-shadow:var(--shadow)}
+.dropzone{border:2px dashed #8bbde1;border-radius:22px;padding:32px;text-align:center;background:#f6fbff}
+.dropzone strong{display:block;font-size:19px;color:var(--blue);margin-bottom:7px}
+.file-btn{display:inline-block;margin-top:12px;padding:11px 16px;border-radius:13px;background:var(--blue);color:#fff;font-weight:900;cursor:pointer}
+input[type=file]{display:none}
+.preview{max-width:100%;max-height:320px;border-radius:18px;margin-top:15px;display:none}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}
+.field label{font-weight:900}.field input,.field textarea,.field select{border:2px solid #dce6ee;border-radius:13px;padding:12px;background:#fbfdff;outline:0}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--blue)}
+.field textarea{min-height:110px;resize:vertical}
+
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.art-card{overflow:hidden;padding:0}.art-img{height:225px;background:#edf5fa;display:grid;place-items:center}
+.art-img img{width:100%;height:100%;object-fit:cover}.art-info{padding:18px}
+.art-info h3{margin:0 0 6px}.meta{font-size:13px;color:var(--muted)}
+.reactions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
+.react{border:0;border-radius:10px;padding:8px 5px;background:#f2f6fa;font-weight:900;color:#526579;font-size:12px}
+.react:hover{background:#eee9ff;color:var(--purple)}
+.teacher-note{margin-top:13px;padding:12px;border-radius:13px;background:#fff8df;border-left:4px solid var(--yellow);font-size:14px;line-height:1.5}
+
+.detail{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}.detail-image,.detail-side{background:#fff;border-radius:26px;box-shadow:var(--shadow);padding:18px}
+.detail-image img{width:100%;max-height:560px;object-fit:contain;border-radius:18px;background:#f4f8fb}
+.detail-side h2{margin-top:0}.reaction-big{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.reaction-big button{border:0;border-radius:12px;padding:12px;background:#f3f6fa;font-weight:900}
+.comment{margin-top:17px;padding:15px;background:#eef7ff;border-radius:17px}.comment textarea{width:100%;border:2px solid #dbe7ef;border-radius:12px;padding:12px;min-height:100px}
+.feedback{margin-top:14px;padding:15px;border-radius:16px;background:#fff8df}.stars{color:#e7b51e;font-size:25px;letter-spacing:2px}
+.pbd-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.pbd-box{padding:15px;background:#f7f9fc;border-radius:16px}.pbd-box h4{margin:0 0 8px}
+.review-layout{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:15px}.review-layout .card{min-height:100%}
+.review-thumb{height:250px;border-radius:18px;overflow:hidden;background:#edf5fa}.review-thumb img{width:100%;height:100%;object-fit:cover}
+.teacher-list{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.review-card{display:grid;grid-template-columns:140px 1fr;gap:16px}
+
+.guru-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.guru-button{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow);text-align:left}.guru-button h3{margin:0 0 5px}.guru-button p{color:var(--muted);font-size:13px;min-height:38px}.number{font-size:36px;font-weight:900;color:var(--purple)}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.filter-row button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 13px;font-weight:900;color:#62758a}.filter-row button.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.data-table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
+.data-table th,.data-table td{padding:12px;border-bottom:1px solid #edf1f4;text-align:left;font-size:13px}.data-table th{background:#f3f6fa}
+.podium-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.badge{text-align:center;background:#fff;border-radius:24px;padding:25px 15px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.badge-symbol{width:62px;height:62px;margin:auto;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#eee9ff,#dff3ff);color:var(--purple);font-size:25px;font-weight:900}
+.progress{height:8px;background:#e9eef3;border-radius:10px;margin:14px 0 8px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--blue2))}
+.badge p{font-size:13px;color:var(--muted);line-height:1.5}
+.empty{text-align:center;padding:45px;color:var(--muted);background:#fff;border-radius:24px;box-shadow:var(--shadow)}
+.toast{position:fixed;right:20px;bottom:25px;background:var(--ink);color:#fff;padding:14px 18px;border-radius:14px;z-index:100;opacity:0;transform:translateY(15px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}
+.modal{position:fixed;inset:0;background:rgba(28,43,59,.45);display:grid;place-items:center;z-index:90;padding:20px}.modal-box{width:min(450px,100%);background:#fff;border-radius:24px;padding:25px;box-shadow:0 25px 70px rgba(0,0,0,.2)}
+.modal-box h2{margin-top:0}.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:18px}
+footer{text-align:center;padding:30px;color:var(--muted);font-weight:700}
+
+@media(max-width:950px){
+ .hero{grid-template-columns:1fr}.grid,.gallery-grid{grid-template-columns:1fr 1fr}.stat-grid,.guru-buttons,.podium-grid{grid-template-columns:1fr 1fr}.review-layout{grid-template-columns:1fr}.teacher-list{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+ .navlinks,.profile-chip{display:none}.nav{padding:10px 15px}main{padding:18px 14px 60px}.hero-copy h1{font-size:58px}.hero-art{height:360px}.grid,.gallery-grid,.form-grid,.pbd-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.stat-grid,.guru-buttons,.podium-grid{grid-template-columns:1fr 1fr}.reactions{grid-template-columns:1fr 1fr}.detail{grid-template-columns:1fr}.review-card{grid-template-columns:1fr}.dashboard-head{align-items:flex-start}
+}
+
+/* Cheerful bot + music */
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 8% 12%,rgba(101,200,243,.13),transparent 22%),radial-gradient(circle at 92% 20%,rgba(169,139,234,.13),transparent 24%),radial-gradient(circle at 50% 100%,rgba(88,184,120,.10),transparent 28%)}
+.cheer-bot{position:fixed;right:22px;bottom:22px;z-index:80;display:flex;align-items:center;gap:10px;animation:botFloat 3s ease-in-out infinite}
+.bot-bubble{max-width:245px;padding:12px 16px;border-radius:18px 18px 5px 18px;background:linear-gradient(135deg,#fff,#f3edff);border:2px solid #e7ddff;box-shadow:0 12px 30px rgba(38,54,74,.13);font-weight:900;color:#5b438f}
+.bot-face{width:58px;height:58px;border-radius:20px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,#7651c9,#65c8f3);box-shadow:0 9px 20px rgba(118,81,201,.25);border:3px solid #fff}
+@keyframes botFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
+.music-control{position:fixed;left:20px;bottom:20px;z-index:80;border:0;border-radius:999px;padding:11px 16px;background:#fff;color:var(--purple);font-weight:900;box-shadow:0 10px 25px rgba(38,54,74,.14);border:2px solid #eee9ff}
+.music-control.on{background:linear-gradient(135deg,#7651c9,#65c8f3);color:#fff}
+.delete-btn{background:#ffe9ec!important;color:#c83d57!important;border:1px solid #ffd0d8!important;box-shadow:none!important}
+.cheer-title{display:inline-block;padding:7px 13px;border-radius:999px;background:linear-gradient(90deg,#fff0a8,#ffd7e8,#d9d0ff);color:#684c91;font-weight:900}
+@media(max-width:650px){.cheer-bot{right:12px;bottom:75px}.bot-bubble{max-width:190px;font-size:12px}.music-control{left:12px;bottom:14px}}
+
+/* === ARTVERSE V3: colourful motion + sticker UI === */
+body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(1px);opacity:.55}
+body::before{width:230px;height:230px;left:-70px;top:22%;background:radial-gradient(circle,#8ee5ff 0 22%,#b89cff 23% 45%,transparent 46%);animation:splashFloat 9s ease-in-out infinite alternate}
+body::after{width:260px;height:260px;right:-90px;bottom:8%;background:radial-gradient(circle,#ffd66b 0 20%,#ff9cc8 21% 42%,transparent 43%);animation:splashFloat2 11s ease-in-out infinite alternate}
+.splash{position:fixed;z-index:-1;width:72px;height:72px;border-radius:52% 48% 62% 38%;opacity:.55;pointer-events:none;filter:blur(.2px);mix-blend-mode:multiply}
+.splash.s1{left:5%;top:48%;background:#79d8f4;animation:swirl 7s ease-in-out infinite}
+.splash.s2{right:7%;top:30%;background:#c39bf7;animation:swirl 9s ease-in-out infinite reverse}
+.splash.s3{left:42%;bottom:4%;background:#ffd86e;animation:swirl 8s ease-in-out infinite}
+.sticker{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;border-radius:999px;background:#fff;border:2px dashed #e9c95d;box-shadow:0 5px 0 rgba(38,54,74,.08);font-weight:900;transform:rotate(-2deg);animation:stickerWiggle 3s ease-in-out infinite}
+.podium-grid .badge{position:relative;overflow:visible;transition:transform .2s}
+.podium-grid .badge:hover{transform:translateY(-7px) rotate(-1deg)}
+.podium-grid .badge:nth-child(1)::after{content:"🎨"}.podium-grid .badge:nth-child(2)::after{content:"🌈"}.podium-grid .badge:nth-child(3)::after{content:"🔥"}.podium-grid .badge:nth-child(4)::after{content:"🏆"}
+.podium-grid .badge::after{position:absolute;right:-8px;top:-15px;font-size:28px;transform:rotate(12deg);filter:drop-shadow(0 3px 2px rgba(0,0,0,.12))}
+.podium-grid .badge-symbol{font-size:30px}
+.podium-grid .btn{margin-top:8px}
+.btn{position:relative;overflow:hidden}.btn::after{content:"";position:absolute;width:20px;height:70px;background:rgba(255,255,255,.28);transform:rotate(25deg) translateX(-70px);top:-10px;transition:.45s}.btn:hover::after{transform:rotate(25deg) translateX(180px)}
+.cheer-bot{animation:botFloat 3.5s ease-in-out infinite;box-shadow:0 12px 28px rgba(118,81,201,.18)}
+.music-control{border-radius:999px!important;border:2px solid #fff!important;box-shadow:0 7px 0 rgba(38,54,74,.12)!important}
+.spotify-player{position:fixed;right:18px;bottom:72px;width:min(330px,calc(100vw - 36px));z-index:80;background:#fff;border-radius:18px;padding:8px;box-shadow:0 16px 35px rgba(38,54,74,.18);border:2px solid #e4ebf2;display:none}
+.spotify-player.show{display:block;animation:popIn .25s ease-out}.spotify-player iframe{width:100%;height:80px;border:0;border-radius:12px}
+.music-hint{font-size:11px;font-weight:800;color:#708197;padding:2px 5px 5px;text-align:center}
+@keyframes splashFloat{from{transform:translate(0,0) rotate(0deg)}to{transform:translate(100px,-55px) rotate(170deg)}}
+@keyframes splashFloat2{from{transform:translate(0,0) rotate(0deg)}to{transform:translate(-90px,-70px) rotate(-140deg)}}
+@keyframes swirl{0%,100%{transform:translate(0,0) rotate(0) scale(1)}35%{transform:translate(35px,-20px) rotate(120deg) scale(1.12)}70%{transform:translate(-15px,30px) rotate(250deg) scale(.9)}}
+@keyframes botFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(2deg)}}
+@keyframes stickerWiggle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) scale(1.03)}}
+@keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+@media(max-width:650px){.spotify-player{right:10px;bottom:64px}.splash{display:none}}
+</style>
+</head>
+<body>
+<div class="app"><div class="splash s1"></div><div class="splash s2"></div><div class="splash s3"></div>
+
+<header>
+  <div class="nav">
+    <div class="brand"><div class="brand-mark"></div>Artverse</div>
+    <div class="navlinks" id="navlinks"></div>
+    <div class="profile-chip" id="profileChip">Selamat datang</div>
+  </div>
+</header>
+
+<main>
+<section id="welcome" class="view active">
+  <div class="hero">
+    <div class="hero-copy">
+      <h2>Platform Karya Seni Murid</h2>
+      <h1>Art<span>verse</span></h1>
+      <p>Ruang tersusun untuk menghantar, menyimpan, menilai dan menghargai karya seni murid. Guru boleh menyemak karya, memberi maklum balas dan merekod penilaian PBD dalam satu tempat.</p>
+      <div class="actions">
+        <button class="btn primary" onclick="showView('submit')">Hantar Karya</button>
+        <button class="btn blue" onclick="login('teacher')">Log Masuk Sebagai Guru</button>
+        <button class="btn green" onclick="openStudentLogin()">Log Masuk Sebagai Murid</button>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="sun"></div><div class="cloud"></div><div class="cloud two"></div>
+      <div class="easel"><div class="canvas"></div><div class="leg l"></div><div class="leg r"></div></div>
+      <div class="palette3d"></div><div class="brush3d"></div><div class="floor"></div>
+    </div>
+  </div>
+</section>
+
+<section id="submit" class="view">
+  <div class="section-title"><h2>Hantar Karya</h2><p>Muat naik gambar karya dan lengkapkan maklumat pembelajaran.</p></div>
+  <div class="form-card">
+    <form id="artForm">
+      <div class="dropzone">
+        <strong>Muat Naik Gambar Karya</strong>
+        Format yang diterima: JPG, JPEG, PNG.
+        <label class="file-btn">Pilih Gambar<input id="artFile" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png"></label>
+        <img id="preview" class="preview" alt="Pratonton karya">
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Nama Murid</label><input id="studentName" required placeholder="Masukkan nama murid"></div>
+        <div class="field"><label>Nama Kelas</label><input id="className" required placeholder="Contoh: 2 Amanah"></div>
+        <div class="field"><label>Tajuk Pembelajaran</label><input id="topic" required placeholder="Contoh: Corak dan Rekaan"></div>
+        <div class="field"><label>Nama Karya</label><input id="title" required placeholder="Masukkan nama karya"></div>
+        <div class="field full"><label>Penerangan / Apresiasi Karya</label><textarea id="description" required placeholder="Ceritakan idea, bahan, warna atau maksud karya."></textarea></div>
+      </div>
+      <button class="btn primary" style="width:100%;margin-top:18px">Hantar Karya</button>
+    </form>
+  </div>
+</section>
+
+<section id="gallery" class="view">
+  <div class="section-title"><h2>Karya Rakan Kelas</h2><p>Murid hanya melihat karya daripada kelas yang dipilih semasa log masuk.</p></div>
+  <div id="studentClassLabel" class="empty" style="margin-bottom:18px">Log masuk sebagai murid untuk melihat karya rakan sekelas.</div>
+  <div id="galleryGrid" class="gallery-grid"></div>
+</section>
+
+<section id="studentDashboard" class="view">
+  <div class="dashboard-head"><div><h2>Ruang Murid <span class="cheer-title">🌈 Hey Artis! 🎨</span></h2><p>Hantar karya, lihat karya rakan dan semak maklum balas guru.</p></div><div class="avatar">M</div></div>
+  <div class="grid">
+    <div class="card feature"><div class="icon-box i-purple">01</div><h3>🎨 Hantar Karya</h3><p>Serahkan gambar karya bersama maklumat pembelajaran.</p><button class="btn primary" onclick="showView('submit')">Hantar Karya</button></div>
+    <div class="card feature"><div class="icon-box i-blue">02</div><h3>🖼️ Karya Rakan Kelas</h3><p>Lihat dan beri satu reaksi kepada karya rakan sekelas.</p><button class="btn blue" onclick="showView('gallery')">Lihat Karya</button></div>
+    <div class="card feature"><div class="icon-box i-green">03</div><h3>💬 Maklum Balas Guru</h3><p>Lihat komen, kekuatan, kelemahan dan penilaian guru untuk karya sendiri.</p><button class="btn green" onclick="showView('myFeedback')">Lihat Maklum Balas</button></div>
+  </div>
+</section>
+
+<section id="myFeedback" class="view">
+  <div class="section-title"><h2>Maklum Balas Guru</h2><p>Maklum balas untuk karya sendiri sahaja.</p></div>
+  <div id="myFeedbackGrid" class="gallery-grid"></div>
+</section>
+
+<section id="teacherDashboard" class="view">
+  <div class="dashboard-head"><div><h2>Ruang Guru</h2><p>Semak karya dan beri maklum balas kepada murid.</p></div><div class="avatar">G</div></div>
+  <div class="guru-buttons">
+    <button class="guru-button" onclick="teacherPanel('new')"><div class="number" id="newCount">0</div><h3>Karya Baru</h3><p>Karya yang perlu disemak.</p><span class="btn soft">Lihat Sekarang</span></button>
+    <button class="guru-button" onclick="teacherPanel('checked')"><div class="number" id="checkedCount">0</div><h3>Telah Semak</h3><p>Karya yang telah dinilai.</p><span class="btn soft">Lihat Senarai</span></button>
+    <button class="guru-button" onclick="teacherPanel('feedback')"><div class="number" id="feedbackCount">0</div><h3>Maklum Balas Murid</h3><p>Reaksi dan komen terhadap karya.</p><span class="btn soft">Lihat Maklum Balas</span></button>
+    <button class="guru-button" onclick="showView('pbd')"><div class="number">PBD</div><h3>Data PBD</h3><p>Data mengikut tahun dan kelas.</p><span class="btn soft">Lihat Data</span></button>
+  </div>
+  <div class="section-title"><h2 id="teacherSectionTitle">Karya Baru</h2></div>
+  <div id="teacherList" class="teacher-list"></div>
+</section>
+
+<section id="review" class="view">
+  <button class="btn soft" onclick="showView('teacherDashboard')">Kembali ke Ruang Guru</button>
+  <div id="reviewContent" style="margin-top:18px"></div>
+</section>
+
+<section id="pbd" class="view">
+  <div class="section-title"><h2>Data PBD</h2><p>Pilih tahun dahulu, kemudian pilih kelas untuk melihat data yang khusus.</p></div>
+  <div class="card">
+    <strong>Pilih Tahun</strong>
+    <div id="yearFilters" class="filter-row"></div>
+    <strong>Pilih Kelas</strong>
+    <div id="classFilters" class="filter-row"></div>
+  </div>
+  <div id="pbdData" style="margin-top:18px"></div>
+</section>
+
+<section id="podium" class="view">
+  <div class="section-title"><div class="sticker">🌟 Penyertaan Hebat!</div><h2>🏆 Podium Pencapaian</h2><p>🎨 Setiap usaha, idea dan keberanian berkarya layak diraikan!</p></div>
+  <div class="podium-grid">
+    <div class="badge"><div class="badge-symbol">AC</div><h3>🎨 Artis Kreatif</h3><p>Hantar 5 karya dan teruskan berkarya!</p><div class="progress"><span id="creativeProgress" style="width:0%"></span></div><b id="creativeText">0 / 5</b></div>
+    <div class="badge"><div class="badge-symbol">WH</div><h3>🌈 Warna Hebat</h3><p>Dapatkan 10 reaksi daripada rakan.</p><div class="progress"><span id="colorProgress" style="width:0%"></span></div><b id="colorText">0 / 10</b></div>
+    <div class="badge"><div class="badge-symbol">RB</div><h3>🔥 Rajin Berkarya</h3><p>Hantar karya 4 minggu berturut-turut mengikut masa.</p><div class="progress"><span id="workProgress" style="width:0%"></span></div><b id="workText">0 / 4 minggu</b></div>
+    <div class="badge"><div class="badge-symbol">BS</div><h3>🏆 Bintang Seni</h3><p>Lihat komen dan penilaian guru untuk karya sendiri.</p><button class="btn purple" onclick="showView('myFeedback')">💬 Lihat Ulasan Guru</button></div>
+  </div>
+</section>
+</main>
+
+<div id="studentModal" class="modal hidden">
+  <div class="modal-box">
+    <h2>Log Masuk Sebagai Murid</h2>
+    <p>Masukkan nama dan kelas supaya Artverse boleh memaparkan karya rakan sekelas sahaja.</p>
+    <div class="field"><label>Nama Murid</label><input id="loginStudentName" placeholder="Nama murid"></div>
+    <div class="field" style="margin-top:12px"><label>Nama Kelas</label><input id="loginStudentClass" placeholder="Contoh: 2 Amanah"></div>
+    <div class="modal-actions"><button class="btn outline" onclick="closeStudentLogin()">Batal</button><button class="btn green" onclick="confirmStudentLogin()">Masuk</button></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<div id="cheerBot" class="cheer-bot"><div id="botBubble" class="bot-bubble">🎨 Hai! Jom cipta karya hebat! ✨</div><div class="bot-face">🤖🎨</div></div><button id="musicBtn" class="music-control" onclick="toggleSpotify()">🎵 Dengar Muzik</button><div id="spotifyPlayer" class="spotify-player"><div class="music-hint">🎧 End of Beginning — Djo · tekan ▶ untuk mula</div><iframe src="https://open.spotify.com/embed/track/72XN0y9I5VSG1kc7kmZeKS?utm_source=generator" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="Spotify: End of Beginning by Djo"></iframe></div><footer>Artverse — Platform pengurusan karya dan PBD Pendidikan Seni Visual.</footer>
+
+<script>
+const starter=[
+ {id:1,title:"Taman Impian",name:"Aisyah",className:"2 Amanah",topic:"Menggambar",description:"Saya menggunakan warna ceria untuk menunjukkan suasana taman.",image:"",reactions:{Hebat:3,Syabas:2,Kreatif:4,Menarik:1},strength:"Penggunaan warna dan susunan objek yang baik.",weakness:"Perincian pada beberapa objek boleh dipertingkatkan.",comment:"Teruskan usaha dan cuba tambah lebih banyak perincian.",stars:4,pbd:"Baik",date:"2026-08-08",checked:true},
+ {id:2,title:"Pelangi Ceria",name:"Arjun",className:"2 Amanah",topic:"Menggambar",description:"Karya saya menggunakan warna pelangi untuk menunjukkan kegembiraan.",image:"",reactions:{Hebat:2,Syabas:3,Kreatif:2,Menarik:3},strength:"Pemilihan warna yang menarik.",weakness:"Kawalan garisan masih boleh diperhalus.",comment:"Idea sangat baik. Teruskan latihan.",stars:5,pbd:"Sangat Baik",date:"2026-08-09",checked:true},
+ {id:3,title:"Corak Alam",name:"Mei Lin",className:"3 Bestari",topic:"Corak dan Rekaan",description:"Saya menghasilkan corak berulang menggunakan inspirasi daun.",image:"",reactions:{Hebat:1,Syabas:1,Kreatif:4,Menarik:2},strength:"",weakness:"",comment:"",stars:0,pbd:"",date:"2026-08-10",checked:false}
+];
+let data=JSON.parse(localStorage.getItem("artverseData")||"null")||starter;
+let currentRole=localStorage.getItem("artverseRole")||"";
+let currentStudentName=localStorage.getItem("artverseStudentName")||"";
+let currentStudentClass=localStorage.getItem("artverseStudentClass")||"";
+let selectedId=null,currentYear="1",currentClass="";
+
+function save(){localStorage.setItem("artverseData",JSON.stringify(data))}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400)}
+function escapeHTML(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function yearOf(c){const m=String(c).match(/^\s*(\d)/);return m?m[1]:""}
+function artImage(a){
+ if(a.image)return a.image;
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7fcff2"/><stop offset=".5" stop-color="#f5d36b"/><stop offset="1" stop-color="#a98bea"/></linearGradient></defs><rect width="900" height="600" fill="url(#g)"/><circle cx="720" cy="130" r="70" fill="#fff3a7"/><path d="M0 450 Q180 330 350 440 T700 420 T900 430 V600 H0Z" fill="#76c982"/><text x="55" y="545" font-family="Arial" font-size="45" font-weight="700" fill="#26364a">${escapeHTML(a.title)}</text></svg>`;
+ return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(svg);
+}
+function totalReactions(a){return Object.values(a.reactions||{}).reduce((s,n)=>s+n,0)}
+
+function login(role){
+ currentRole=role;localStorage.setItem("artverseRole",role);
+ if(role==="teacher"){updateNav();showView("teacherDashboard")}
+}
+function openStudentLogin(){document.getElementById("studentModal").classList.remove("hidden")}
+function closeStudentLogin(){document.getElementById("studentModal").classList.add("hidden")}
+function confirmStudentLogin(){
+ const n=document.getElementById("loginStudentName").value.trim(),c=document.getElementById("loginStudentClass").value.trim();
+ if(!n||!c){toast("Sila masukkan nama dan kelas.");return}
+ currentRole="student";currentStudentName=n;currentStudentClass=c;
+ localStorage.setItem("artverseRole","student");localStorage.setItem("artverseStudentName",n);localStorage.setItem("artverseStudentClass",c);
+ closeStudentLogin();updateNav();showView("studentDashboard");toast("Log masuk murid berjaya.")
+}
+function updateNav(){
+ const n=document.getElementById("navlinks"),p=document.getElementById("profileChip");
+ if(currentRole==="teacher"){
+   n.innerHTML=`<button onclick="showView('welcome')">Home</button><button onclick="showView('teacherDashboard')">Ruang Guru</button><button onclick="showView('podium')">Podium</button>`;
+   p.textContent="Mod Guru";
+ }else if(currentRole==="student"){
+   n.innerHTML=`<button onclick="showView('welcome')">Home</button><button onclick="showView('teacherDashboard')">Ruang Guru</button><button onclick="showView('podium')">Podium</button>`;
+   p.textContent=currentStudentName+" · "+currentStudentClass;
+ }else{
+   n.innerHTML=`<button onclick="showView('welcome')">Home</button><button onclick="login('teacher')">Ruang Guru</button><button onclick="showView('podium')">Podium</button>`;
+   p.textContent="Selamat datang";
+ }
+}
+function showView(id){
+ document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ renderAll();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+const labelMap={Hebat:"🌟 Hebat",Syabas:"👏 Syabas",Kreatif:"🎨 Kreatif",Menarik:"💖 Menarik"};
+function cardHTML(a,studentMode=false){
+ const own=studentMode && a.name===currentStudentName;
+ return `<article class="card art-card">
+   <div class="art-img"><img src="${artImage(a)}" alt="${escapeHTML(a.title)}"></div>
+   <div class="art-info">
+    <h3>${escapeHTML(a.title)}</h3>
+    <div class="meta">${escapeHTML(a.name)} · ${escapeHTML(a.className)} · ${escapeHTML(a.topic)}</div>
+    ${studentMode&&!own?`<div class="reactions">
+      ${["Hebat","Syabas","Kreatif","Menarik"].map(x=>`<button class="react" onclick="react(${a.id},'${x}')">${labelMap[x]} ${a.reactions[x]}</button>`).join("")}
+    </div>`:""}
+    ${a.teacherComment?`<div class="teacher-note"><b>Maklum Balas Guru</b><br>${escapeHTML(a.teacherComment)}</div>`:""}
+    <button class="btn soft" style="margin-top:14px" onclick="openDetail(${a.id})">Lihat Karya</button>
+   </div>
+ </article>`;
+}
+function renderGallery(){
+ const grid=document.getElementById("galleryGrid"),label=document.getElementById("studentClassLabel");
+ if(currentRole!=="student"||!currentStudentClass){
+   label.textContent="Log masuk sebagai murid untuk melihat karya rakan sekelas.";
+   grid.innerHTML=`<div class="empty">Sila log masuk sebagai murid dan masukkan kelas.</div>`;return;
+ }
+ label.textContent="Kelas aktif: "+currentStudentClass;
+ const classmates=data.filter(a=>a.className.toLowerCase()===currentStudentClass.toLowerCase()&&a.name!==currentStudentName);
+ grid.innerHTML=classmates.length?classmates.map(a=>cardHTML(a,true)).join(""):`<div class="empty">Belum ada karya rakan sekelas dalam kelas ini.</div>`;
+}
+function renderMyFeedback(){
+ const mine=data.filter(a=>a.name.toLowerCase()===currentStudentName.toLowerCase()&&a.className.toLowerCase()===currentStudentClass.toLowerCase());
+ document.getElementById("myFeedbackGrid").innerHTML=mine.length?mine.map(a=>`
+ <article class="card">
+  <div class="review-thumb"><img src="${artImage(a)}" alt=""></div>
+  <h3>${escapeHTML(a.title)}</h3><div class="meta">${escapeHTML(a.className)} · ${escapeHTML(a.topic)}</div>
+  <div class="feedback"><b>Kekuatan</b><p>${escapeHTML(a.strength||"Belum dinilai.")}</p><b>Kelemahan</b><p>${escapeHTML(a.weakness||"Belum dinilai.")}</p><b>Ulasan</b><p>${escapeHTML(a.teacherComment||"Belum ada maklum balas.")}</p><b>Penilaian</b><div class="stars">${"★".repeat(a.stars||0)}${"☆".repeat(5-(a.stars||0))}</div><p>Tahap PBD: <b>${escapeHTML(a.pbd||"Belum dinilai")}</b></p></div>
+ </article>`).join(""):`<div class="empty">Tiada karya anda ditemui untuk kelas ini.</div>`;
+}
+function react(id,type){
+ const a=data.find(x=>x.id===id);if(!a)return;
+ a.reactions[type]=(a.reactions[type]||0)+1;save();renderGallery();toast("Reaksi anda telah direkodkan.");
+}
+function openDetail(id){
+ selectedId=id;const a=data.find(x=>x.id===id);if(!a)return;
+ document.getElementById("reviewContent").innerHTML=`<div class="detail">
+ <div class="detail-image"><img src="${artImage(a)}" alt="${escapeHTML(a.title)}"></div>
+ <div class="detail-side"><h2>${escapeHTML(a.title)}</h2><p class="meta">${escapeHTML(a.name)} · ${escapeHTML(a.className)} · ${escapeHTML(a.topic)}</p>
+ <p style="line-height:1.7">${escapeHTML(a.description)}</p>
+ <h3>Reaksi Rakan</h3><div class="reaction-big">${["Hebat","Syabas","Kreatif","Menarik"].map(x=>`<button onclick="react(${a.id},'${x}')">${labelMap[x]} · ${a.reactions[x]}</button>`).join("")}</div>
+ <div class="feedback"><b>Maklum Balas Guru</b><p>${escapeHTML(a.teacherComment||"Belum ada maklum balas.")}</p><p>Tahap PBD: <b>${escapeHTML(a.pbd||"Belum dinilai")}</b></p><div class="stars">${"★".repeat(a.stars||0)}${"☆".repeat(5-(a.stars||0))}</div></div>
+ </div></div>`;
+ showView("review");
+}
+function teacherPanel(mode){
+ const title={new:"Karya Baru",checked:"Telah Semak",feedback:"Maklum Balas Murid"}[mode];
+ document.getElementById("teacherSectionTitle").textContent=title;
+ let list;
+ if(mode==="new")list=data.filter(a=>!a.checked);
+ if(mode==="checked")list=data.filter(a=>a.checked);
+ if(mode==="feedback")list=[...data].sort((a,b)=>totalReactions(b)-totalReactions(a));
+ document.getElementById("teacherList").innerHTML=list.length?list.map(a=>`
+ <article class="card review-card"><div class="review-thumb"><img src="${artImage(a)}" alt=""></div><div><h3 style="margin:0 0 5px">${escapeHTML(a.title)}</h3><div class="meta">${escapeHTML(a.name)} · ${escapeHTML(a.className)}<br>${escapeHTML(a.topic)}</div><p class="meta">Reaksi rakan: ${totalReactions(a)}</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn purple" onclick="openTeacherReview(${a.id})">Semak Karya</button><button class="btn delete-btn" onclick="deleteArtwork(${a.id})">🗑️ Padam Data</button></div></div></article>`).join(""):`<div class="empty">Tiada rekod untuk kategori ini.</div>`;
+}
+function openTeacherReview(id){
+ selectedId=id;const a=data.find(x=>x.id===id);
+ document.getElementById("reviewContent").innerHTML=`<div class="review-layout">
+ <div class="card"><h3>Maklumat Karya</h3><div class="review-thumb"><img src="${artImage(a)}" alt=""></div><p><b>Nama:</b> ${escapeHTML(a.name)}<br><b>Kelas:</b> ${escapeHTML(a.className)}<br><b>Tajuk:</b> ${escapeHTML(a.title)}<br><b>Pembelajaran:</b> ${escapeHTML(a.topic)}</p><p>${escapeHTML(a.description)}</p></div>
+ <div class="card"><h3>💬 Maklum Balas Guru</h3>
+ <div class="field"><label>Kekuatan</label><textarea id="strength">${escapeHTML(a.strength||"")}</textarea></div>
+ <div class="field" style="margin-top:10px"><label>Kelemahan</label><textarea id="weakness">${escapeHTML(a.weakness||"")}</textarea></div>
+ <div class="field" style="margin-top:10px"><label>Ulasan / Cadangan</label><textarea id="teacherComment">${escapeHTML(a.teacherComment||"")}</textarea></div>
+ <label style="display:block;margin-top:12px;font-weight:900">Penilaian Bintang</label><select id="stars" style="width:100%;padding:11px;border:2px solid #dce6ee;border-radius:12px"><option value="1" ${a.stars===1?"selected":""}>1 Bintang</option><option value="2" ${a.stars===2?"selected":""}>2 Bintang</option><option value="3" ${a.stars===3?"selected":""}>3 Bintang</option><option value="4" ${a.stars===4?"selected":""}>4 Bintang</option><option value="5" ${a.stars===5?"selected":""}>5 Bintang</option></select>
+ </div>
+ <div class="card"><h3>Penilaian PBD</h3><div class="field"><label>Tahap Penguasaan</label><select id="pbdLevel"><option value="">Pilih tahap</option>${["Belum Dinilai","Perlu Bimbingan","Memuaskan","Baik","Sangat Baik","Cemerlang"].map(x=>`<option ${a.pbd===x?"selected":""}>${x}</option>`).join("")}</select></div><button class="btn primary" style="width:100%;margin-top:18px" onclick="saveReview()">Simpan Penilaian</button></div>
+ </div>`;
+ showView("review");
+}
+function saveReview(){
+ const a=data.find(x=>x.id===selectedId);if(!a)return;
+ a.strength=document.getElementById("strength").value.trim();a.weakness=document.getElementById("weakness").value.trim();a.teacherComment=document.getElementById("teacherComment").value.trim();a.stars=Number(document.getElementById("stars").value);a.pbd=document.getElementById("pbdLevel").value;a.checked=true;
+ save();toast("Penilaian PBD dan maklum balas telah disimpan.");setTimeout(()=>showView("teacherDashboard"),600);
+}
+
+function deleteArtwork(id){
+ const a=data.find(x=>x.id===id); if(!a)return;
+ if(!confirm(`Padam rekod karya "${a.title}" oleh ${a.name}?\n\nKarya, reaksi dan maklum balas guru akan dipadam daripada Artverse pada peranti ini.`))return;
+ data=data.filter(x=>x.id!==id); save(); toast("🗑️ Rekod murid telah dipadam."); teacherPanel("new"); renderAll();
+}
+function deleteAllStudentData(name,className){
+ const count=data.filter(a=>a.name.toLowerCase()===name.toLowerCase()&&a.className.toLowerCase()===className.toLowerCase()).length;
+ if(!count){toast("Tiada rekod murid ditemui.");return}
+ if(!confirm(`Padam SEMUA ${count} rekod karya untuk ${name} (${className})?`))return;
+ data=data.filter(a=>!(a.name.toLowerCase()===name.toLowerCase()&&a.className.toLowerCase()===className.toLowerCase()));
+ save();toast(`🗑️ Semua data ${name} telah dipadam.`);renderAll();
+}
+function toggleSpotify(){const p=document.getElementById("spotifyPlayer");p.classList.toggle("show");toast(p.classList.contains("show")?"🎵 Spotify dibuka — tekan ▶ untuk mula!":"🎨 Muzik ditutup.")}
+const botMessages=["🤖🎨 Hey Artis! Shabash! Karya kamu sangat hebat! 🌟","🌈 Jangan takut mencuba warna baharu! Kamu kreatif! 💜","👏 Syabas! Setiap karya ada cerita yang istimewa! ✨","🖌️ Terus berkarya! Idea kecil boleh jadi karya besar! 🚀","💖 Wow! Usaha kamu memang membanggakan. Shabash! 🎉","🎨 Eksperimen, cipta, dan nikmati proses seni! 😄"];let botIndex=0;setInterval(()=>{const b=document.getElementById("botBubble");if(b){botIndex=(botIndex+1)%botMessages.length;b.textContent=botMessages[botIndex]}},5000);
+
+function renderTeacher(){
+ document.getElementById("newCount").textContent=data.filter(a=>!a.checked).length;
+ document.getElementById("checkedCount").textContent=data.filter(a=>a.checked).length;
+ document.getElementById("feedbackCount").textContent=data.reduce((s,a)=>s+totalReactions(a),0);
+ if(!document.getElementById("teacherList").innerHTML)teacherPanel("new");
+}
+function renderPBD(){
+ const years=[1,2,3,4,5,6];
+ document.getElementById("yearFilters").innerHTML=years.map(y=>`<button class="${currentYear==y?"active":""}" onclick="selectYear('${y}')">Tahun ${y}</button>`).join("");
+ const classes=[...new Set(data.filter(a=>yearOf(a.className)==currentYear).map(a=>a.className))];
+ if(!currentClass||!classes.includes(currentClass))currentClass=classes[0]||"";
+ document.getElementById("classFilters").innerHTML=classes.length?classes.map(c=>`<button class="${currentClass===c?"active":""}" onclick="selectClass('${escapeHTML(c)}')">${escapeHTML(c)}</button>`).join(""):`<span class="meta">Tiada kelas untuk Tahun ${currentYear}.</span>`;
+ const rows=data.filter(a=>yearOf(a.className)==currentYear&&a.className===currentClass);
+ document.getElementById("pbdData").innerHTML=rows.length?`<table class="data-table"><thead><tr><th>Nama Murid</th><th>Bil. Karya</th><th>Reaksi</th><th>Bintang</th><th>Tahap PBD</th><th>Ulasan Guru</th></tr></thead><tbody>${[...new Set(rows.map(a=>a.name))].map(n=>{
+ const mine=rows.filter(a=>a.name===n),last=mine[mine.length-1];
+ return `<tr><td>${escapeHTML(n)}</td><td>${mine.length}</td><td>${mine.reduce((s,a)=>s+totalReactions(a),0)}</td><td>${mine.reduce((s,a)=>s+(a.stars||0),0)}</td><td>${escapeHTML(last.pbd||"Belum dinilai")}</td><td>${escapeHTML(last.teacherComment||"Belum ada ulasan")}</td></tr>`;
+ }).join("")}</tbody></table>`:`<div class="empty">Tiada data PBD untuk ${escapeHTML(currentClass||"kelas ini")}.</div>`;
+}
+function selectYear(y){currentYear=y;currentClass="";renderPBD()}
+function selectClass(c){currentClass=c;renderPBD()}
+function renderPodium(){
+ const mine=data.filter(a=>a.name.toLowerCase()===currentStudentName.toLowerCase()&&a.className.toLowerCase()===currentStudentClass.toLowerCase());
+ const works=mine.length,reactions=mine.reduce((s,a)=>s+totalReactions(a),0),reviewed=mine.filter(a=>a.checked).length;
+ document.getElementById("creativeProgress").style.width=Math.min(100,works/5*100)+"%";document.getElementById("creativeText").textContent=Math.min(works,5)+" / 5";
+ document.getElementById("colorProgress").style.width=Math.min(100,reactions/10*100)+"%";document.getElementById("colorText").textContent=Math.min(reactions,10)+" / 10";
+ document.getElementById("workProgress").style.width=Math.min(100,works/4*100)+"%";document.getElementById("workText").textContent=Math.min(works,4)+" / 4 minggu";
+}
+function renderAll(){
+ renderGallery();renderMyFeedback();renderTeacher();renderPBD();renderPodium();
+}
+document.getElementById("artFile").addEventListener("change",e=>{
+ const f=e.target.files[0];if(!f)return;
+ if(!["image/jpeg","image/png"].includes(f.type)){toast("Sila pilih JPG, JPEG atau PNG.");e.target.value="";return}
+ const r=new FileReader();r.onload=ev=>{const p=document.getElementById("preview");p.src=ev.target.result;p.style.display="block"};r.readAsDataURL(f);
+});
+document.getElementById("artForm").addEventListener("submit",e=>{
+ e.preventDefault();const file=document.getElementById("artFile").files[0];if(!file){toast("Sila pilih gambar karya.");return}
+ const r=new FileReader();r.onload=ev=>{
+  data.unshift({id:Date.now(),title:document.getElementById("title").value.trim(),name:document.getElementById("studentName").value.trim(),className:document.getElementById("className").value.trim(),topic:document.getElementById("topic").value.trim(),description:document.getElementById("description").value.trim(),image:ev.target.result,reactions:{Hebat:0,Syabas:0,Kreatif:0,Menarik:0},strength:"",weakness:"",teacherComment:"",stars:0,pbd:"",date:new Date().toISOString().slice(0,10),checked:false});
+  save();e.target.reset();document.getElementById("preview").style.display="none";toast("Karya berjaya dihantar.");setTimeout(()=>showView("gallery"),600);
+ };r.readAsDataURL(file);
+});
+updateNav();renderAll();
+</script>
+</div>
+</body>
+</html>
